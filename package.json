@@ -1,0 +1,16 @@
+{
+  "name": "flex-socket-io-master",
+  "version": "1.0.0",
+  "description": "Socket version of Master server for Online Subsystem for flex",
+  "main": "app.js",
+    "scripts": {
+    "start" : " node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Srikanth Polineni",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.29.1",
+    "uniqid": "^5.3.0"
+  }
+}
