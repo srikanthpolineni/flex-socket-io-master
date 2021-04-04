@@ -3,9 +3,16 @@ logs
 *.log
 npm-debug.log*
 
-build/Release
+# testing
+/coverage
+
+# production
+build/*
+public/*
 
 .npm
 
 .vscode
 node_modules/
+/.pnp
+.pnp.js

@@ -1,8 +1,9 @@
 const environment = process.env.ENVRONMENT || 'local';
-require('dotenv').config({path: `.env.${environment}`});
+require('dotenv').config({ path: `.env.${environment}` });
 const { createServer } = require('http');
 const express = require('express');
 const ws = require('ws');
+var path = require('path');
 const uniqid = require('uniqid');
 const moment = require('moment');
 
@@ -11,19 +12,64 @@ const PORT = process.env.PORT | 8080;
 const strDateTimeNow = () => moment().format('DD.MM.YYYY HH:mm:ss');
 
 const app = express();
+
+const options = {
+    index: "index.html"
+};
+
 app.use(express.json({ extended: false }));
 app.get("/health", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     return res.json({ "status": "UP" });
 });
+app.use(express.static('public', options));
 app.use('/api/*', (req, res, next) => {
     //TODO: Authentication check
-    if(false) {
+    if (false) {
         res.send(401, 'Unauthorized');
     }
     next();
 });
 app.use("/api/servers", require("./routes/servers"));
+
+app.use((error, req, res, next) => {
+    console.error(error.stack);
+    res.status(500);
+
+    // respond with html page
+    if (req.accepts('html')) {
+        res.sendFile(__dirname + '/500.html');
+        return;
+    }
+
+    // respond with json
+    if (req.accepts('json')) {
+        res.json({ error: 'Internal Server Error' });
+        return;
+    }
+
+    // default to plain-text. send()
+    res.type('txt').send('Internal Server Error');
+})
+
+app.use(function (req, res, next) {
+    res.status(404);
+
+    // respond with html page
+    if (req.accepts('html')) {
+        res.sendFile(__dirname + '/404.html');
+        return;
+    }
+
+    // respond with json
+    if (req.accepts('json')) {
+        res.json({ error: 'Not found' });
+        return;
+    }
+
+    // default to plain-text. send()
+    res.type('txt').send('Not found');
+});
 
 const webServer = createServer(app);
 
@@ -41,11 +87,11 @@ webSocketServer.on("connection", (webSocket) => {
         console.log(`[${strDateTimeNow()}] message from [${webSocket.id}]: `, message.toString());
     });
 
-    webSocket.on('error', function(err) {
+    webSocket.on('error', function (err) {
         console.log(`[${strDateTimeNow()}] ${webSocket.id} disconnected due to error: ${err}`);
     });
 
-    webSocket.on('close', function(err) {
+    webSocket.on('close', function (err) {
         console.log(`[${strDateTimeNow()}] ${webSocket.id} connection closed`);
     });
 
