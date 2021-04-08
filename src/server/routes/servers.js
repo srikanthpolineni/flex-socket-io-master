@@ -14,10 +14,15 @@ router.get('/', (req, res) => {
     res.send(response);
 });
 
-router.get('/:serverId', (req, res) => {
+router.get('/:serverId', async (req, res, next) => {
 
-    //TODO: return server specific details.
-    res.sendStatus(200);
+    try {
+        res.json({});
+    }
+    catch (e) {
+
+    }
+    return next(error);
 });
 
 router.post('/', (req, res) => {
@@ -43,7 +48,7 @@ router.post('/restart/:serverId', (req, res) => {
 });
 
 router.post('/terminate/:serverId/player/:playerId', (req, res) => {
-    const {serverId, playerId} = req.params;
+    const { serverId, playerId } = req.params;
     //TODO:
     res.sendStatus(200);
 });

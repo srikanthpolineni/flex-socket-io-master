@@ -1,11 +1,14 @@
-const environment = process.env.ENVRONMENT || 'local';
-require('dotenv').config({ path: `.env.${environment}` });
+const environment = process.env.ENVIRONMENT || 'local';
+require('dotenv').config({ path: __dirname + `/.env.${environment}` });
+debugger;
 const { createServer } = require('http');
 const express = require('express');
 const ws = require('ws');
 var path = require('path');
 const uniqid = require('uniqid');
 const moment = require('moment');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose')
 
 const PORT = process.env.PORT | 8080;
 
@@ -17,12 +20,12 @@ const options = {
     index: "index.html"
 };
 
-app.use(express.json({ extended: false }));
+app.use(express.json({ extended: true }));
+app.use(express.static('public', options));
 app.get("/health", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     return res.json({ "status": "UP" });
 });
-app.use(express.static('public', options));
 app.use('/api/*', (req, res, next) => {
     //TODO: Authentication check
     if (false) {
@@ -99,4 +102,12 @@ webSocketServer.on("connection", (webSocket) => {
 
 webServer.listen(PORT, () => {
     console.info(`Express Server running on port: ${PORT}`);
+});
+
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
+mongoose.connection.once('open', _ => {
+    console.log('MongoDB connection is successful:', process.env.MONGODB);
+});
+mongoose.connection.on('error', err => {
+    console.log(err);
 });
