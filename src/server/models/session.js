@@ -3,7 +3,7 @@ class Session {
     constructor(id) {
         this._id = id;
         this.ip = '';
-        this.port = '';
+        this.port = 0;
         this.status = SessionStatus.INITIALIZING;
         this.isSingleMatch = true;
         this.matches = [];

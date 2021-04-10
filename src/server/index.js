@@ -4,10 +4,8 @@ debugger;
 const { createServer } = require('http');
 const express = require('express');
 const ws = require('ws');
-var path = require('path');
 const uniqid = require('uniqid');
 const moment = require('moment');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose')
 
 const PORT = process.env.PORT | 8080;
@@ -66,7 +64,7 @@ app.use(function (req, res, next) {
 
     // respond with json
     if (req.accepts('json')) {
-        res.json({ error: 'Not found' });
+        res.json({ error: 'Not found : 404' });
         return;
     }
 
@@ -100,9 +98,6 @@ webSocketServer.on("connection", (webSocket) => {
 
 });
 
-webServer.listen(PORT, () => {
-    console.info(`Express Server running on port: ${PORT}`);
-});
 
 mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
 mongoose.connection.once('open', _ => {
@@ -110,4 +105,8 @@ mongoose.connection.once('open', _ => {
 });
 mongoose.connection.on('error', err => {
     console.log(err);
+});
+
+webServer.listen(PORT, () => {
+    console.info(`Express Server running on port: ${PORT}`);
 });
