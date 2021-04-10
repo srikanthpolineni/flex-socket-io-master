@@ -13,7 +13,7 @@ class Session {
 
 };
 
-const SessionStatus = { INITIALIZING: 0, CREATED: 1, INPROGRESS: 3, CLOSED: 4 };
+const SessionStatus = { CREATED: 0, INPROGRESS: 1, CLOSED: 2 };
 Object.freeze(SessionStatus);
 
 module.exports = { Session: Session, SessionStatus: SessionStatus }
