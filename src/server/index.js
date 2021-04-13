@@ -28,6 +28,7 @@ app.use('/api/*', (req, res, next) => {
     next();
 });
 app.use("/api/servers", require("./routes/servers"));
+app.use("/api/clients", require('./routes/clients'));
 
 app.use((error, req, res, next) => {
     console.error(error.stack);

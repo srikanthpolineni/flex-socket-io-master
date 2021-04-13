@@ -31,6 +31,7 @@ const createWebSocketServer = (app, webServer) => {
                     if (existingSession && existingSession.length > 0) {
                         console.error("Session already exists for the IP:" + message.ip);
                         webSocket.send(JSON.stringify({ action: "SESSIONCREATE", code: 409, sessionId: existingSession[0]._id, message: "Active Session already exists for the given IP." }));
+                        webSocket.sessionId = existingSession[0]._id;
                         return;
                     }
 
@@ -46,6 +47,7 @@ const createWebSocketServer = (app, webServer) => {
                     await newSession.save();
                     console.log(newSession);
                     webSocket.send(JSON.stringify({ action: "SESSIONCREATE", code: 200, sessionId: newSession._id, message: "Session Created." }));
+                    webSocket.sessionId = newSession._id;
                 }
                 else if (action === 'MATCHINIT') {
 
@@ -71,7 +73,7 @@ const createWebSocketServer = (app, webServer) => {
                         { ip: message.ip, status: SessionStatus.CREATED },
                         { $push: { matches: newMatch._id }, status: SessionStatus.INPROGRESS, lastUpdatedTime: new Date() }
                     );
-                    console.log("Number of documents updated:" + result.nModified);
+                    console.log("Number of documents updated on MATCHINIT:" + result.nModified);
                     webSocket.send(JSON.stringify({ action: "MATCHINIT", code: 200, matchId: newMatch._id, message: "Match init successful." }));
                 }
             } catch (err) {
@@ -79,12 +81,26 @@ const createWebSocketServer = (app, webServer) => {
             }
         });
 
-        webSocket.on('error', function (err) {
+        webSocket.on('error', async (err) => {
             console.log(`[${strDateTimeNow()}] ${webSocket._socket.remoteAddress} disconnected due to error: ${err}`);
+            if (webSocket.sessionId) {
+                const result = await SessionSchema.updateOne(
+                    { _id: webSocket.sessionId},
+                    { status: SessionStatus.CLOSED, lastUpdatedTime: new Date() }
+                );
+                console.log("Number of documents updated on error:" + result.nModified);
+            }
         });
 
-        webSocket.on('close', function (err) {
+        webSocket.on('close', async (err) => {
             console.log(`[${strDateTimeNow()}] ${webSocket._socket.remoteAddress} connection closed`);
+            if (webSocket.sessionId) {
+                const result = await SessionSchema.updateOne(
+                    { _id: webSocket.sessionId},
+                    { status: SessionStatus.CLOSED, lastUpdatedTime: new Date() }
+                );
+                console.log("Number of documents updated on close:" + result.nModified);
+            }
         });
 
     });
