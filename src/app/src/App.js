@@ -1,6 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from '@material-ui/core';
-import { useRoutes, Routes, Route } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import GlobalStyles from './components/GlobalStyles'
 import DashboardLayout from './components/DashboardLayout'
 import theme from './theme'
@@ -8,11 +8,17 @@ import theme from './theme'
 const routes = [
   {
     path: "/",
-    element: <DashboardLayout />
+    element: <DashboardLayout />,
+    children: [
+      { path: 'account', element: <div>Account</div> }
+    ]
   },
   {
     path: "app",
-    element: <DashboardLayout />
+    element: <DashboardLayout />,
+    children:[
+      { path: 'account', element: <div>Account</div> }
+    ]
   }
 ];
 

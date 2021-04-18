@@ -18,7 +18,7 @@ const NavItem = ({ href, icon: Icon, title, ...rest }) => {
                 py: 1.25,
                 textTransform: 'none',
                 width: '100%',
-                ...PropTypes(active && { color: 'primary.main' }),
+                ...(active && { color: 'primary.main' }),
                 '& svg': { mr: 1 }
             }}
                 to={href}>

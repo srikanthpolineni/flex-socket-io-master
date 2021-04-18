@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
+import { Avatar, Box, Divider, Drawer, Hidden, List, Typography } from '@material-ui/core';
 import {
-    AlertTriangle as AlertTriangle,
-    BarChart as BarChartIcon,
+    AlertTriangle as AlertTriangleIcon,
+    Activity as ActivityIcon,
     Calendar as CalendarIcon,
     Grid as GridIcon,
     MapPin as MapPinIcon,
@@ -9,10 +12,7 @@ import {
     User as UserIcon,
     Users as UsersIcon
 } from 'react-feather';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { Avatar, Box, Divider, Drawer, Hidden, List, Typography } from '@material-ui/core';
 import NavItem from './NavItem';
-import { PropTypes } from 'prop-types';
 
 
 const user = {
@@ -34,7 +34,7 @@ const items = [
     },
     {
         href: '/app/matches',
-        icon: BarChartIcon,
+        icon: ActivityIcon,
         title: 'Matches'
     },
     {
@@ -53,14 +53,14 @@ const items = [
         title: 'Users'
     },
     {
-        href: '/app/alerts',
-        icon: AlertTriangleIcon,
-        title: 'Emergency'
-    },
-    {
         href: '/app/account',
         icon: UserIcon,
         title: 'Account'
+    },
+    {
+        href: '/app/alerts',
+        icon: AlertTriangleIcon,
+        title: 'Emergency'
     }
 ];
 
@@ -75,11 +75,24 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 
     const content = (
 
-        <Box sx={{ display: 'flex', flowDirection: 'column', height: '100%' }}>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+        }}>
 
-            <Box sx={{ alignItems: 'center', display: 'flex', flowDirection: 'column', p: 2 }}>
+            <Box sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                p: 2
+            }}>
 
-                <Avatar component={RouterLink} src={user.avatar} sx={{ cursor: 'pointer', width: 64, height: 64 }} to="/app/account" />
+                <Avatar
+                    component={RouterLink}
+                    src={user.avatar}
+                    sx={{ cursor: 'pointer', width: 64, height: 64 }}
+                    to="/app/account" />
                 <Typography color="textPrimary" variant="h5">
                     {user.name}
                 </Typography>
@@ -88,7 +101,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
                 </Typography>
             </Box>
             <Divider />
-            <Box>
+            <Box sx={{ p: 2 }}>
                 <List>
                     {items.map((item) => (
                         <NavItem href={item.href} key={item.title} title={item.title} icon={item.icon} />
@@ -135,3 +148,4 @@ DashboardSidebar.propTypes = {
     openMobile: false
 }
 
+export default DashboardSidebar;
