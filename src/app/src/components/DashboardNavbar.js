@@ -1,7 +1,7 @@
 
 import { AppBar, Badge, Box, Hidden, IconButton, Toolbar } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import InputIcon from '@material-ui/icons/Input';
+import { LogOut as LogOutIcon } from 'react-feather';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -25,7 +25,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
                         </Badge>
                     </IconButton>
                     <IconButton color="inherit">
-                        <InputIcon />
+                        <LogOutIcon />
                     </IconButton>
                 </Hidden>
                 <Hidden lgUp>

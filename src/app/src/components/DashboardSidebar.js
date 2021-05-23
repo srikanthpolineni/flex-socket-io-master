@@ -10,7 +10,8 @@ import {
     MapPin as MapPinIcon,
     Server as ServerIcon,
     User as UserIcon,
-    Users as UsersIcon
+    Users as UsersIcon,
+    LogOut as LogOutIcon
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -23,55 +24,54 @@ const user = {
 
 const items = [
     {
-        href: '/app/dashboard',
+        href: '/dashboard',
         icon: GridIcon,
         title: 'Dashboard'
     },
     {
-        href: '/app/servers',
+        href: '/servers',
         icon: ServerIcon,
         title: 'Servers'
     },
     {
-        href: '/app/matches',
+        href: '/matches',
         icon: ActivityIcon,
         title: 'Matches'
     },
     {
-        href: '/app/geo',
+        href: '/geo',
         icon: MapPinIcon,
         title: 'Geo'
     },
     {
-        href: '/app/plan',
+        href: '/plan',
         icon: CalendarIcon,
         title: 'Schedule'
     },
     {
-        href: '/app/users',
+        href: '/users',
         icon: UsersIcon,
         title: 'Users'
     },
     {
-        href: '/app/account',
-        icon: UserIcon,
-        title: 'Account'
-    },
-    {
-        href: '/app/alerts',
+        href: '/alerts',
         icon: AlertTriangleIcon,
         title: 'Emergency'
+    },
+    {
+        href: '/account',
+        icon: UserIcon,
+        title: 'Account'
     }
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
-    const location = useLocation();
-
+    const { pathname } = useLocation();
     useEffect(() => {
         if (openMobile && onMobileClose) {
             onMobileClose();
         }
-    }, [location.pathname]);
+    }, [pathname]);
 
     const content = (
 
@@ -92,7 +92,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
                     component={RouterLink}
                     src={user.avatar}
                     sx={{ cursor: 'pointer', width: 64, height: 64 }}
-                    to="/app/account" />
+                    to="/account" />
                 <Typography color="textPrimary" variant="h5">
                     {user.name}
                 </Typography>
@@ -108,8 +108,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
                     ))}
                 </List>
             </Box>
-            <Box sx={{ flowGrow: 1 }} />
-
+            <Box sx={{ flowGrow: 1, marginBottom: "auto" }} />
+            <Hidden lgUp>
+                <Box sx={{ p: 2, marginTop: "auto" }} >
+                    <NavItem href="/logout" key="Logout" title="Logout" icon={LogOutIcon} />
+                </Box>
+            </Hidden>
         </Box>
     );
 
@@ -130,7 +134,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
                     anchor="left"
                     open
                     variant="persistent"
-                    PaperProps={{ sx: { width: 256, top: 64, height: 'calc(100%-64px' } }}>
+                    PaperProps={{ sx: { width: 256, top: 64, height: 'calc(100% - 64px)' } }}>
                     {content}
                 </Drawer>
             </Hidden>
@@ -143,7 +147,7 @@ DashboardSidebar.propTypes = {
     openMobile: PropTypes.bool
 }
 
-DashboardSidebar.propTypes = {
+DashboardSidebar.defaultProps = {
     onMobileClose: () => { },
     openMobile: false
 }
