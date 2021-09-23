@@ -85,7 +85,7 @@ const createWebSocketServer = (app, webServer) => {
             console.log(`[${strDateTimeNow()}] ${webSocket._socket.remoteAddress} disconnected due to error: ${err}`);
             if (webSocket.sessionId) {
                 const result = await SessionSchema.updateOne(
-                    { _id: webSocket.sessionId},
+                    { _id: webSocket.sessionId },
                     { status: SessionStatus.CLOSED, lastUpdatedTime: new Date() }
                 );
                 console.log("Number of documents updated on error:" + result.nModified);
@@ -96,7 +96,7 @@ const createWebSocketServer = (app, webServer) => {
             console.log(`[${strDateTimeNow()}] ${webSocket._socket.remoteAddress} connection closed`);
             if (webSocket.sessionId) {
                 const result = await SessionSchema.updateOne(
-                    { _id: webSocket.sessionId},
+                    { _id: webSocket.sessionId },
                     { status: SessionStatus.CLOSED, lastUpdatedTime: new Date() }
                 );
                 console.log("Number of documents updated on close:" + result.nModified);

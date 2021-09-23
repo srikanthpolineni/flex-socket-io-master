@@ -75,7 +75,7 @@ createWebSocketServer(app, webServer);
 
 app.locals.servers = [];
 
-mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true });
 mongoose.connection.once('open', _ => {
     console.log('MongoDB connection is successful:', process.env.MONGODB);
 });
